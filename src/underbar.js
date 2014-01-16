@@ -161,6 +161,7 @@ var _ = { };
          result.push(element[functionOrKey]());
       });
     } else if (typeof functionOrKey === 'function') {
+      // it's a function
       _.each(collection, function(element) {
         result.push(functionOrKey.apply(element, args));
       });
@@ -184,6 +185,12 @@ var _ = { };
   //     return total + number;
   //   }, 0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
+    // var result;
+    
+    // _.each(collection, function(element) {
+    //   result = iterator(result, element);
+    // })
+    // return result;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -201,7 +208,7 @@ var _ = { };
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
