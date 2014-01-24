@@ -184,15 +184,27 @@ var _ = { };
   //   var sum = _.reduce(numbers, function(total, number){
   //     return total + number;
   //   }, 0); // should be 6
+  
+
+  // There must be a way, way better way to do this. Ugggggly. REVISIT
   _.reduce = function(collection, iterator, accumulator) {
-    // var result;
-    
-    // _.each(collection, function(element) {
-    //   result = iterator(result, element);
-    // })
-    // return result;
+    var result, previousValue;
+    var first_run = (accumulator) ? true : false;
+    _.each(collection, function(element) {
+      if(first_run) {
+        previousValue = iterator(accumulator, element);
+        first_run = false;
+      } else if (!previousValue) {         
+       previousValue = iterator(0, element);
+      } else {
+        previousValue = iterator(previousValue, element);
+      }
+     });
+    return previousValue;
   };
 
+
+ 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
@@ -208,13 +220,37 @@ var _ = { };
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-
+    var result = true;
+    _.each(collection, function(item) {
+      if(iterator) {
+        if(!iterator(item)) {
+          result = false;
+        }
+      } else {
+        if(item != true) {
+          result = false;
+        }
+      }
+    }, false);
+    return result;
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
+    var result = false;
+     _.each(collection, function(item) {
+      if(iterator) {
+        if(iterator(item)) {
+          result = true;
+        }
+      } else {
+        if(item) {
+          result = true;
+        }
+      }
+    }, false);
+    return result;
   };
 
 
@@ -237,6 +273,15 @@ var _ = { };
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    console.log("Arguments length: " + arguments.length);
+    if(arguments.length > 1) {
+      _.each(arguments, function(value, key) {
+        for(prop in value) {
+          console.log(key + " k, " + prop + " p, " + value);
+        }
+        });
+      }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
