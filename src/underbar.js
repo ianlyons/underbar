@@ -273,12 +273,11 @@ var _ = { };
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
-    console.log("Arguments length: " + arguments.length);
     if(arguments.length > 1) {
-      _.each(arguments, function(value, key) {
-        for(prop in value) {
-          console.log(key + " k, " + prop + " p, " + value);
-        }
+      _.each(arguments, function(element, index) {
+          for(var key in element) {
+            obj[key] = element[key];
+          }
         });
       }
     return obj;
@@ -287,6 +286,16 @@ var _ = { };
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+        if(arguments.length > 1) {
+      _.each(arguments, function(element, index) {
+          for(var key in element) {
+            if(!obj.hasOwnProperty(key)) {
+              obj[key] = element[key];
+            }
+          }
+        });
+      }
+    return obj;
   };
 
 
