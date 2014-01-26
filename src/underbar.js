@@ -337,6 +337,16 @@ var _ = { };
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var alreadyCalled = false;
+    var result;
+    return function() {
+      if((!alreadyCalled) || (arguments != args)) {
+        result = func.apply(this,arguments);
+        alreadyCalled = true;
+        var args = arguments;
+      }
+      return result;
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -346,6 +356,10 @@ var _ = { };
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments).slice(2);
+    setTimeout(function() {
+      func.apply(this, args);
+    }, wait);
   };
 
 
@@ -360,6 +374,27 @@ var _ = { };
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var newArray = Array.prototype.slice.call(array);
+    var m = newArray.length, t, i;
+
+    // Fisher-Yates shuffle
+    while(m) {
+      // pick a random index from the array
+      i = Math.floor(Math.random() * m);
+
+      // decrease the length of the unshuffled elements remaining in the array
+      m--;
+
+      // pull the last element out
+      t = newArray[m];
+
+      // replace it with the random element, shuffling it from the random place in the array to the very back
+      newArray[m] = newArray[i];
+
+      // then replace the displaced element where the random element used to live
+      newArray[i] = t;
+    }
+    return newArray;
   };
 
 
