@@ -180,31 +180,30 @@ var _ = { };
   // first element in the collection.
   //
   // Example:
-  //   var numbers = [1,2,3];
-  //   var sum = _.reduce(numbers, function(total, number){
-  //     return total + number;
-  //   }, 0); // should be 6
-  
+    // var numbers = [1,2,3];
+    // var sum = _.reduce(numbers, function(total, number){
+    //   return total + number;
+    // }, 0); // should be 6
 
   // There must be a way, way better way to do this. Ugggggly. REVISIT
   _.reduce = function(collection, iterator, accumulator) {
-    var result, previousValue;
-    var first_run = (accumulator) ? true : false;
-    _.each(collection, function(element) {
-      if(first_run) {
-        previousValue = iterator(accumulator, element);
-        first_run = false;
-      } else if (!previousValue) {         
-       previousValue = iterator(0, element);
+    _.each(collection, function(element, index) {
+      if(accumulator === undefined) {
+        accumulator = element;
       } else {
-        previousValue = iterator(previousValue, element);
+        accumulator = iterator(accumulator, element);
       }
-     });
-    return previousValue;
+    });
+    return accumulator;
   };
 
+  // _.reduce takes three params: collection, iterator, accumulator.
+  // var total = accumulator || 0;
 
- 
+  // then sums them and returns them.
+  // _.reduce calls the function until the end of the array/object is reached.
+
+
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
